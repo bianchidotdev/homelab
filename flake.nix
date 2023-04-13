@@ -19,7 +19,7 @@
         modules = [
           ./workloads/blocky.nix
           ./workloads/ddns.nix
-	  ./workloads/gluetun.nix
+	  #./workloads/gluetun.nix
           ./workloads/jellyfin.nix
           ./workloads/monero.nix
           ./workloads/valheim.nix
