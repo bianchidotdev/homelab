@@ -20,11 +20,11 @@
           ./workloads/blocky.nix
           #./workloads/caddy.nix
           ./workloads/ddns.nix
-          ./workloads/dontstarve.nix
+          #./workloads/dontstarve.nix
           #./workloads/gluetun.nix
           ./workloads/jellyfin.nix
           ./workloads/monero.nix
-          ./workloads/valheim.nix
+          #./workloads/valheim.nix
           ./workloads/whoami.nix
         ];
       };
