@@ -1,4 +1,5 @@
 {
+  sops.secrets."gluetun.env" = { };
   virtualisation.oci-containers.containers = {
     gluetun = {
       image = "qmcgaw/gluetun:v3";
@@ -10,7 +11,7 @@
         "--cap-add=NET_ADMIN"
       ];
       environmentFiles = [
-        "/home/bonky/workspace/gluetun/.env"
+        config.sops.secrets."gluetun.env".path
       ];
     };
   };
