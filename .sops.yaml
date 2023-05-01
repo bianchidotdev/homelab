@@ -1,0 +1,15 @@
+keys:
+- &server_bonkyserv age1r54fysts4vszg4jdcm5tdtd4fsduvxsu4u507sdwa5upreu2uejsaq6dxx
+- &admin_bianchi age18fmehf33j5pfme8kxkt0gkns6u3jxx9typ3xks49elkuw2q88puqunqflm
+
+creation_rules:
+- path_regex: secrets/[^/]+\.yaml$
+  key_groups:
+  - age:
+    - *server_bonkyserv
+    - *admin_bianchi
+- path_regex: bonkyserv/secrets/[^/]+\.yaml$
+  key_groups:
+  - age:
+    - *server_bonkyserv
+    - *admin_bianchi

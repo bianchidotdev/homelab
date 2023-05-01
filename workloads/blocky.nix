@@ -1,4 +1,9 @@
 {
+  sops.secrets."blocky/config.yml" = {
+    sopsFile = ../secrets/secrets.yaml;
+    path = "/etc/blocky/config.yml";
+  };
+
   virtualisation.oci-containers.containers = {
     blocky = {
       image = "spx01/blocky:latest";
@@ -8,7 +13,7 @@
         "53:53/udp"
       ];
       volumes = [
-       "/home/bonky/workspace/blocky/config.yml:/app/config.yml"
+       "/etc/blocky/config.yml:/app/config.yml"
       ];
     };
   };

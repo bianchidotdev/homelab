@@ -1,10 +1,5 @@
 
 {
-  users.users.bonky = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "sudo" ];
-  };
-
   services.openssh.enable = true;
 
   security.sudo.extraRules = [{
