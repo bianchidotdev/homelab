@@ -10,7 +10,9 @@
       ./hardware-configuration.nix
       ./common/default.nix
       ./common/users.nix
+      ./common/pkgs.nix
       ./common/ssh.nix
+      ./common/tailscale.nix
       ./common/oci.nix
     ];
 
@@ -24,8 +26,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "bonkyserv";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -48,27 +48,8 @@
   };
   */
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    dig
-    emacs
-    fd
-    git
-    lsof
-    netcat
-    vim
-    wget
-    zsh
-
-    virt-manager
-
-    tailscale
-  ];
-
   # List services that you want to enable:
   services.dnsmasq.enable = false;
-  services.tailscale.enable = true;
 
   # Open ports in the firewall.
   networking.firewall.checkReversePath = "loose";
