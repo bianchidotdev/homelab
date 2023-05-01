@@ -9,4 +9,6 @@
       options = [ "NOPASSWD" ];
     }];
   }];
+
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
 }

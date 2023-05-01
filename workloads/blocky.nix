@@ -1,6 +1,5 @@
 {
   sops.secrets."blocky/config.yml" = {
-    sopsFile = ../secrets/secrets.yaml;
     path = "/etc/blocky/config.yml";
   };
 

@@ -1,8 +1,6 @@
 { pkgs, config, ... }:
 {
-  sops.secrets."cloudflare-ddns.env" = {
-    sopsFile = ../secrets/secrets.yaml;
-  };
+  sops.secrets."cloudflare-ddns.env" = { };
   virtualisation.oci-containers.containers = {
     ddns = {
       image = "oznu/cloudflare-ddns:latest";
