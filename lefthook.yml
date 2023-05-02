@@ -5,7 +5,7 @@ pre-commit:
   parallel: true
   commands:
     detect-secrets:
-      run: detect-secrets scan --baseline .secrets.baseline
+      run: detect-secrets-hook --baseline .secrets.baseline
 #     eslint:
 #       glob: "*.{js,ts,jsx,tsx}"
 #       run: yarn eslint {staged_files}
