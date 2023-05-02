@@ -17,7 +17,11 @@ echo "experimental-features = nix-command flakes" | sudo tee /etc/nix/conf.nix
 nix shell github:serokell/deploy-rs
 nix flake update
 nix flake check
+# for all servers
 deploy
+
+# for a single server
+deploy ".#<server_name>"
 ```
 
 ## Setting secrets
