@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
+let
+  cloudflare-r2-data-repo = "s3:https://783680ac3df521a60e7687b14aa11486.r2.cloudflarestorage.com/bonkyserv-data";
+in
 {
   environment.systemPackages = [ pkgs.restic ];
+
+  environment.sessionVariables = {
+    RESTIC_REPOSITORY = cloudflare-r2-data-repo;
+    CLOUDFLARE_DATA_CREDS_FILE = config.sops.secrets.cloudflare-r2-data-backup-creds.path;
+    RESTIC_PASSWORD_FILE = config.sops.secrets.restic-data-password.path;
+  };
 
   environment.etc."restic/restic-ignore" = {
     text = ''
@@ -23,7 +32,7 @@
 
   services.restic.backups.data-to-r2 = {
     initialize = true;
-    repository = "s3:https://783680ac3df521a60e7687b14aa11486.r2.cloudflarestorage.com/bonkyserv-data";
+    repository = cloudflare-r2-data-repo;
 
     paths = [
       "/data"
