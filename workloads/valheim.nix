@@ -1,4 +1,6 @@
 {
+  sops.secrets."valheim.env" = { };
+
   virtualisation.oci-containers.containers = {
     valheim = {
       image = "ghcr.io/lloesche/valheim-server";
@@ -7,11 +9,11 @@
         "9001:9001/tcp"
       ];
       volumes = [
-       "/home/bonky/workspace/valheim/config:/config"
-       "/home/bonky/workspace/valheim/data:/opt/valheim"
+       "/data/valheim/config:/config"
+       "/data/valheim/data:/opt/valheim"
       ];
       environmentFiles = [
-        "/home/bonky/workspace/valheim/.env"
+        config.sops.secrets."valheim.env".path
       ];
       extraOptions = [
         "--cap-add=sys_nice"

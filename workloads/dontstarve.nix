@@ -9,7 +9,7 @@
         "12347:12347/udp"
       ];
       volumes = [
-       "/home/bonky/data/dontstarve:/data"
+       "/data/dontstarve:/data"
       ];
     };
   };
