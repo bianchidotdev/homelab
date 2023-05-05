@@ -5,9 +5,12 @@
 
     deploy-rs.url = "github:serokell/deploy-rs";
     sops-nix.url = "github:Mic92/sops-nix";
+    microvm.url = "github:astro/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
+
   };
 
-  outputs = { self, nixpkgs, deploy-rs, sops-nix }:
+  outputs = { self, nixpkgs, deploy-rs, sops-nix, microvm }:
   let
     defaultSystem = { system ? "x86_64-linux", modules ? [], overlay ? true }@config: nixpkgs.lib.nixosSystem {
       inherit system;
@@ -30,6 +33,7 @@
           ./workloads/monero.nix
           #./workloads/valheim.nix
           ./workloads/whoami.nix
+          microvm.nixosModules.host
         ];
       };
     };
