@@ -12,7 +12,6 @@ in
   users.users.bonky = {
     isNormalUser = true;
     passwordFile = config.sops.secrets.bonky-password.path;
-    # shell = pkgs.zsh;
     createHome = true;
     home = "/home/bonky";
     extraGroups = [ "wheel" "libvirtd" "podman" "docker" ];

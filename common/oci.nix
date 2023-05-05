@@ -13,4 +13,5 @@
     };
   };
   
+  networking.interfaces.docker0.useDHCP = true;
 }
