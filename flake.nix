@@ -21,11 +21,12 @@
       bonkyserv = defaultSystem {
         modules = [
           ./bonkyserv/configuration.nix
-          ./workloads/blocky.nix
+          #./workloads/blocky.nix
           #./workloads/caddy.nix
           ./workloads/ddns.nix
           #./workloads/dontstarve.nix
           #./workloads/gluetun.nix
+          ./workloads/livebook.nix
           ./workloads/jellyfin.nix
           ./workloads/monero.nix
           #./workloads/valheim.nix

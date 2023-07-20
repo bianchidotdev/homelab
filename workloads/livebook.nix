@@ -4,7 +4,7 @@
     livebook = {
       image = "ghcr.io/livebook-dev/livebook";
       ports = [
-        "8080:8080"
+        "8082:8080"
         "8081:8081"
       ];
       environmentFiles = [
@@ -15,7 +15,7 @@
 
   networking.firewall = {
     allowedTCPPorts = [
-      8080
+      8082
       8081
     ];
   };
