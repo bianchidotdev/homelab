@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   sops.secrets."livebook.env" = { };
   virtualisation.oci-containers.containers = {
@@ -9,7 +10,7 @@
       ];
       volumes = [
         "/data/livebook:/data"
-      ]
+      ];
       environmentFiles = [
         config.sops.secrets."livebook.env".path
       ];
