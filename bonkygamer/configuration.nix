@@ -1,6 +1,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./gpu.nix
   ];
   
   # Use the systemd-boot EFI boot loader.

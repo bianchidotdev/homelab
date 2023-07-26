@@ -26,7 +26,7 @@
           ./workloads/ddns.nix
           #./workloads/dontstarve.nix
           #./workloads/gluetun.nix
-          ./workloads/livebook.nix
+          #./workloads/livebook.nix
           ./workloads/jellyfin.nix
           ./workloads/monero.nix
           #./workloads/valheim.nix
