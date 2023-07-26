@@ -4,10 +4,14 @@
     docker
   ];
 
-  virtualisation.docker.enable = true;
   virtualisation = {
     oci-containers.backend = "docker";
-    
+
+    docker = {
+      enable = true;
+      enableNvidia = true;
+    };
+
     podman = {
       enable = false;
     };

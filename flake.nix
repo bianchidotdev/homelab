@@ -33,6 +33,13 @@
           ./workloads/whoami.nix
         ];
       };
+      bonkygamer = defaultSystem {
+        modules = [
+          ./bonkygamer/configuration.nix
+          ./workloads/livebook.nix
+          ./workloads/whoami.nix
+        ];
+      };
     };
     deploy = {
       sshOpts = [ "-t" ];
@@ -46,6 +53,16 @@
             system = {
               user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."bonkyserv";
+            };
+          };
+        };
+        bonkygamer = {
+          hostname = "10.10.0.42";
+          sshUser = "bonky";
+          profiles = {
+            system = {
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."bonkygamer";
             };
           };
         };
