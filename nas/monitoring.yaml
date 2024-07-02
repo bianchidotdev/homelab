@@ -14,6 +14,32 @@ services:
       - 3000:3000
     networks:
       - proxy
+  
+  telegraf:
+    image: telegraf:1.31-alpine
+    hostname: nas
+    volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        - "/:/hostfs:ro"
+        - "/etc:/hostfs/etc:ro"
+        - "/proc:/hostfs/proc:ro"
+        - "/sys:/hostfs/sys:ro"
+        - "/var:/hostfs/var:ro"
+        - "/run:/hostfs/run:ro"
+        #- "/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf"
+        - "etc/telegraf.conf:/etc/telegraf/telegraf.conf"
+    environment:
+        - "HOST_ETC=/hostfs/etc"
+        - "HOST_PROC=/hostfs/proc"
+        - "HOST_SYS=/hostfs/sys"
+        - "HOST_VAR=/hostfs/var"
+        - "HOST_RUN=/hostfs/run"
+        - "HOST_MOUNT_PREFIX=/hostfs"
+    ports:
+        - 8888:8888
+    networks:
+      - proxy
+      
 
 networks:
   proxy:
