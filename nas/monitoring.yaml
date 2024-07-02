@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  influxdb:
+    image: influxdb:2
+    ports:
+      - 8086:8086
+    networks:
+      - proxy
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - 3000:3000
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
