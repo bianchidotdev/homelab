@@ -26,7 +26,7 @@ jobs:
           TAILSCALE_OAUTH_SECRET: op://homelab-deploy/tailscale/oauth-client-secret
           NAS_HOST: op://homelab-deploy/nas/host
           NAS_USER: op://homelab-deploy/nas/user
-          NAS_SSH_KEY: op://homelab-deploy/nas/ssh key/private key?ssh-format=openssh
+          NAS_SSH_KEY: op://homelab-deploy/nas/private_key?ssh-format=openssh
 
       - name: Tailscale
         uses: tailscale/github-action@v2
