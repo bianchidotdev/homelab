@@ -22,11 +22,11 @@ jobs:
           export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          TAILSCALE_OAUTH_CLIENT_ID: op://homelab/tailscale/oauth-client-id
-          TAILSCALE_OAUTH_SECRET: op://homelab/tailscale/oauth-client-secret
-          NAS_HOST: op://homelab/nas/host
-          NAS_USER: op://homelab/nas/user
-          NAS_SSH_KEY: op://homelab/nas/ssh key/private key?ssh-format=openssh
+          TAILSCALE_OAUTH_CLIENT_ID: op://homelab-deploy/tailscale/oauth-client-id
+          TAILSCALE_OAUTH_SECRET: op://homelab-deploy/tailscale/oauth-client-secret
+          NAS_HOST: op://homelab-deploy/nas/host
+          NAS_USER: op://homelab-deploy/nas/user
+          NAS_SSH_KEY: op://homelab-deploy/nas/ssh key/private key?ssh-format=openssh
 
       - name: Tailscale
         uses: tailscale/github-action@v2
