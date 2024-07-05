@@ -1,0 +1,49 @@
+name: Deploy NAS Containers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'nas/monitoring/docker-compose.yml'
+      - '.github/workflows/nas.yaml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Load secret
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          TAILSCALE_OAUTH_CLIENT_ID: op://homelab/tailscale/oauth-client-id
+          TAILSCALE_OAUTH_SECRET: op://homelab/tailscale/oauth-client-secret
+          NAS_HOST: op://homelab/nas/host
+          NAS_USER: op://homelab/nas/user
+          NAS_SSH_KEY: op://homelab/nas/ssh key/private key?ssh-format=openssh
+
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ env.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: start monitoring stack
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.NAS_HOST }}
+          username: ${{ env.NAS_USER }}
+          key: ${{ env.NAS_SSH_KEY }}
+          script: |
+            whoami
+            ls -al
+            # cd /volume1/docker/monitoring
+            # git pull
+            # docker-compose up -d --wait
