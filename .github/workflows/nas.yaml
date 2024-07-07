@@ -48,4 +48,4 @@ jobs:
           script: |
             cd ~/homelab/nas/monitoring
             git pull
-            docker-compose up -d --wait
+            docker compose up -d --wait
