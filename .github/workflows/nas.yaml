@@ -48,5 +48,5 @@ jobs:
           script: |
             cd ~/homelab/nas/monitoring
             git pull
-            export PATH="/usr/local/bin:$PATH"
+            source ~/.bashrc
             op run --env-file .env -- docker-compose up -d --wait
