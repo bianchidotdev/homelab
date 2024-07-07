@@ -35,15 +35,14 @@ jobs:
           oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: test tailscale
+      - name: Get NAS IP
         run: |
-          echo "${{ env.NAS_HOST }}"  
-          tailscale ip --4 ${{ env.NAS_HOST}}
+          echo "NAS_HOST_IP=$(tailscale ip --4 ${{ env.NAS_HOST}})"" >> $GITHUB_ENV
 
       - name: start monitoring stack
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ env.NAS_HOST }}
+          host: ${{ env.NAS_HOST_IP }}
           username: ${{ env.NAS_USER }}
           key: ${{ env.NAS_SSH_KEY }}
           script: |
