@@ -37,8 +37,8 @@ jobs:
 
       - name: test tailscale
         run: |
-          echo "{{ env.NAS_HOST }}"  
-          tailscale ip --4 {{ env.NAS_HOST}}
+          echo "${{ env.NAS_HOST }}"  
+          tailscale ip --4 ${{ env.NAS_HOST}}
 
       - name: start monitoring stack
         uses: appleboy/ssh-action@v1.0.3
