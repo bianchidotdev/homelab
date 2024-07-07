@@ -48,6 +48,6 @@ jobs:
           script: |
             cd ~/homelab/nas/monitoring
             git pull
-            export "/usr/local/bin:$PATH"
+            export PATH="/usr/local/bin:$PATH"
             echo "$PATH"
             docker compose up -d --wait
