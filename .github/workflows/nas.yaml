@@ -46,7 +46,6 @@ jobs:
           username: ${{ env.NAS_USER }}
           key: ${{ env.NAS_SSH_KEY }}
           script: |
-            ls -lh
-            # cd ~/homelab/nas/monitoring
-            # git pull
-            # docker-compose up -d --wait
+            cd ~/homelab/nas/monitoring
+            git pull
+            docker-compose up -d --wait
