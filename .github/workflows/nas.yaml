@@ -37,7 +37,7 @@ jobs:
 
       - name: Get NAS IP
         run: |
-          echo "NAS_HOST_IP=$(tailscale ip --4 ${{ env.NAS_HOST}})"" >> $GITHUB_ENV
+          echo "NAS_HOST_IP=$(tailscale ip --4 ${{ env.NAS_HOST}})" >> $GITHUB_ENV
 
       - name: start monitoring stack
         uses: appleboy/ssh-action@v1.0.3
