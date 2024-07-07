@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'nas/monitoring/docker-compose.yml'
+      - 'nas/monitoring/**/*'
       - '.github/workflows/nas.yaml'
 
 jobs:
