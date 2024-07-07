@@ -49,4 +49,4 @@ jobs:
             cd ~/homelab/nas/monitoring
             git pull
             export PATH="/usr/local/bin:$PATH"
-            docker-compose up -d --wait
+            op run --env-file .env -- docker-compose up -d --wait

@@ -3,15 +3,29 @@ version: "3"
 services:
   influxdb:
     image: influxdb:2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_RETENTION=3m
     ports:
       - 8086:8086
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
     networks:
       - proxy
 
   grafana:
     image: grafana/grafana:11.1.0
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     ports:
       - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
     networks:
       - proxy
   
@@ -40,6 +54,9 @@ services:
     networks:
       - proxy
       
+volumes:
+  grafana-data:
+  influxdb-data:
 
 networks:
   proxy:
