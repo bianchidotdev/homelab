@@ -50,7 +50,8 @@ jobs:
           username: ${{ env.NAS_USER }}
           key: ${{ env.NAS_SSH_KEY }}
           script: |
-            cd ~/homelab/nas/${{ matrix.app }}
+            cd ~/homelab/
             git pull
+            cd ~/homelab/nas/${{ matrix.app }}
             source ~/.bashrc
             op run --env-file .env -- docker-compose up -d --wait
