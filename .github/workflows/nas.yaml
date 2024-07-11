@@ -12,6 +12,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        app: [monitoring, ddns]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -46,7 +50,7 @@ jobs:
           username: ${{ env.NAS_USER }}
           key: ${{ env.NAS_SSH_KEY }}
           script: |
-            cd ~/homelab/nas/monitoring
+            cd ~/homelab/nas/${{ matrix.app }}
             git pull
             source ~/.bashrc
             op run --env-file .env -- docker-compose up -d --wait

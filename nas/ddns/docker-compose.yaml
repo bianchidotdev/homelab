@@ -1,0 +1,13 @@
+version: "3"
+services:
+  porkbun-ddns:
+    image: "mietzen/porkbun-ddns:latest"
+    environment:
+      DOMAIN: "${HOMELAB_DOMAIN}"
+      SUBDOMAINS: "unifi,nas," # Subdomains comma spreaded
+      SECRETAPIKEY: "${PORKBUN_SECRET_API_KEY}" # Your Porkbun Secret-API-Key
+      APIKEY: "${PORKBUN_API_KEY}" # Your Porkbun API-Key
+      # SLEEP: "300" # Seconds to sleep between DynDNS runs
+      # IPV4: "TRUE" # Set IPv4 address
+      # DEBUG: "FALSE" # DEBUG LOGGING
+    restart: unless-stopped
