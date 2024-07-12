@@ -5,7 +5,7 @@ services:
     image: telegraf:1.31
     hostname: bonkymini
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/podman.sock:/var/run/docker.sock:ro
       - /:/hostfs:ro
       - /etc:/hostfs/etc:ro
       - /proc:/hostfs/proc:ro
