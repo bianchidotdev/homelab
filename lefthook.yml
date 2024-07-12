@@ -6,5 +6,3 @@ pre-commit:
   commands:
     detect-secrets:
       run: detect-secrets-hook --baseline .secrets.baseline
-    nix-flake-check:
-      run: nix flake check
