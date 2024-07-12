@@ -1,0 +1,51 @@
+name: Deploy bonkymini Containers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'bonkymini/**/*'
+      - '.github/workflows/bonkymini.yaml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app: [monitoring]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Load secret
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          TAILSCALE_OAUTH_CLIENT_ID: op://homelab-deploy/tailscale/oauth-client-id
+          TAILSCALE_OAUTH_SECRET: op://homelab-deploy/tailscale/oauth-client-secret
+          TARGET_HOST: op://homelab-deploy/bonkymini/host
+          TARGET_USER: op://homelab-deploy/bonkymini/user
+
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ env.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: start monitoring stack
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.TARGET_HOST }}
+          username: ${{ env.TARGET_USER }}
+          script: |
+            cd ~/workspace/homelab/
+            git pull
+            cd ~/workspace/homelab/bonkymini/${{ matrix.app }}
+            source ~/.bashrc
+            op run --env-file .env -- docker-compose up -d --wait
