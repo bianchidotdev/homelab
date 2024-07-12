@@ -44,6 +44,7 @@ jobs:
           USER: ${{ env.TARGET_USER }}
         run: |
           ssh -o StrictHostKeyChecking=no $USER@$HOST "
+            set -e
             cd ~/workspace/homelab/
             git pull
             cd ~/workspace/homelab/bonkymini/${{ matrix.app }}
