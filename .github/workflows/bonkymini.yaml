@@ -38,14 +38,15 @@ jobs:
           oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: start monitoring stack
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.TARGET_HOST }}
-          username: ${{ env.TARGET_USER }}
-          script: |
+      - name: deploy over ssh
+        env: 
+          HOST: ${{ env.TARGET_HOST }}
+          USER: ${{ env.TARGET_USER }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -o $USER@$HOST "
             cd ~/workspace/homelab/
             git pull
             cd ~/workspace/homelab/bonkymini/${{ matrix.app }}
             source ~/.bashrc
             op run --env-file .env -- docker-compose up -d --wait
+          "
