@@ -43,7 +43,7 @@ services:
       - /var:/hostfs/var:ro
       - /run:/hostfs/run:ro
       #- /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ./etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
     environment:
       - INFLUXDB_TOKEN=${INFLUXDB_TELEGRAF_TOKEN}
       - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}

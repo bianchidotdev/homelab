@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'nas/monitoring/**/*'
+      - 'nas/**/*'
       - '.github/workflows/nas.yaml'
 
 jobs:
