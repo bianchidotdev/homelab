@@ -43,7 +43,7 @@ jobs:
           HOST: ${{ env.TARGET_HOST }}
           USER: ${{ env.TARGET_USER }}
         run: |
-          ssh -o StrictHostKeyChecking=no -o $USER@$HOST "
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "
             cd ~/workspace/homelab/
             git pull
             cd ~/workspace/homelab/bonkymini/${{ matrix.app }}
