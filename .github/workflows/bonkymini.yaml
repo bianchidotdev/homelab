@@ -48,5 +48,5 @@ jobs:
             git pull
             cd ~/workspace/homelab/bonkymini/${{ matrix.app }}
             source ~/.bashrc
-            op run --env-file .env -- docker-compose up -d --wait
+            op run --env-file .env -- podman-compose up -d
           "
