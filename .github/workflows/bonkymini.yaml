@@ -37,6 +37,7 @@ jobs:
           oauth-client-id: ${{ env.TAILSCALE_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
           tags: tag:ci
+          version: 1.68.2
 
       - name: deploy over ssh
         env: 
