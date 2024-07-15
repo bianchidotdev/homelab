@@ -14,6 +14,7 @@ services:
       - /run:/hostfs/run:ro
       #- /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
       - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:Z
+      - ./telegraf.d/tor-metrics.conf:/etc/telegraf/telegraf.d/tor-metrics.conf:Z
     environment:
       - INFLUXDB_TOKEN=${INFLUXDB_TELEGRAF_TOKEN}
       - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
