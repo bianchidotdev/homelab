@@ -5,7 +5,7 @@ services:
     image: docker.io/telegraf:1.31
     hostname: bonkymini
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro,Z
       - /:/hostfs:ro
       - /etc:/hostfs/etc:ro
       - /proc:/hostfs/proc:ro
@@ -13,7 +13,7 @@ services:
       - /var:/hostfs/var:ro
       - /run:/hostfs/run:ro
       #- /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:Z
     environment:
       - INFLUXDB_TOKEN=${INFLUXDB_TELEGRAF_TOKEN}
       - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
@@ -25,4 +25,6 @@ services:
       - HOST_RUN=/hostfs/run
       - HOST_MOUNT_PREFIX=/hostfs
     ports:
-        - 8888:8888
+      - 8888:8888
+    # for access to tailnet (easier than setting up a sidecare container)
+    network_mode: host
