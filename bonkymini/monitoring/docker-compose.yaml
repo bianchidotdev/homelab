@@ -25,7 +25,5 @@ services:
       - HOST_VAR=/hostfs/var
       - HOST_RUN=/hostfs/run
       - HOST_MOUNT_PREFIX=/hostfs
-    ports:
-      - 8888:8888
     # for access to tailnet (easier than setting up a sidecare container)
     network_mode: host
