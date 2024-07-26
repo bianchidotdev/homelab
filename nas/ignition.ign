@@ -3,12 +3,6 @@
     "version": "3.4.0"
   },
   "passwd": {
-    "groups": [
-      {
-        "gid": 9000,
-        "name": "docker"
-      }
-    ],
     "users": [
       {
         "name": "bonky",
