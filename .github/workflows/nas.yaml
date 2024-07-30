@@ -48,5 +48,5 @@ jobs:
           DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST }}
         run: |
           cd nas/${{ matrix.app }}
-          ssh-keyscan -t ${{ env.NAS_HOST }}
+          ssh-keyscan ${{ env.NAS_HOST }}
           op run --env-file .env -- docker-compose up -d
