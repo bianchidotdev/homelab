@@ -53,4 +53,4 @@ jobs:
           DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }}
         run: |
           cd nas/${{ matrix.app }}
-          op run --env-file .env -- docker-compose up -d --wait
+          op run --env-file .env -- docker-compose up -d
