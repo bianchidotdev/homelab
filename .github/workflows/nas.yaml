@@ -48,5 +48,5 @@ jobs:
           DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST }}
         run: |
           cd nas/${{ matrix.app }}
-          ssh-keyscan ${{ env.NAS_HOST }}
+          echo "StrictHostKeyChecking no" >> $(find /etc -iname ssh_config)
           op run --env-file .env -- docker-compose up -d
