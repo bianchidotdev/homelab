@@ -12,9 +12,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # strategy:
-    #   matrix:
-    #     app: [monitoring, ddns]
+    strategy:
+      matrix:
+        app: [monitoring] #, ddns]
 
     steps:
       - name: Checkout code
@@ -39,14 +39,14 @@ jobs:
           tags: tag:ci
           version: 1.70.0
 
-      # - name: Install 1Password CLI
-      #   uses: 1password/install-cli-action@v1
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@v1
 
       - name: deploy over ssh
-        # env: 
-          # OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          # DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }}
+        env: 
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST }}
         run: |
-          # cd nas/${{ matrix.app }}
-          ssh -o "StrictHostKeyChecking no" ${{ env.NAS_USER }}@${{ env.NAS_HOST }} 'echo $PATH'
-          # op run --env-file .env -- docker-compose up -d
+          cd nas/${{ matrix.app }}
+          ssh-keyscan -t ${{ env.NAS_HOST }}
+          op run --env-file .env -- docker-compose up -d
