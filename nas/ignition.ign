@@ -24,7 +24,7 @@
         "path": "/etc/hostname",
         "contents": {
           "compression": "",
-          "source": "data:,bonkology"
+          "source": "data:,bonkology-vm"
         },
         "mode": 420
       }
@@ -33,22 +33,19 @@
   "systemd": {
     "units": [
       {
-        "enabled": true,
-        "name": "docker.service"
-      },
-      {
-        "enabled": true,
-        "name": "containerd.service"
-      },
-      {
         "contents": "[Unit]\nDescription=uCore autorebase to unsigned OCI and reboot\nConditionPathExists=!/etc/ucore-autorebase/unverified\nConditionPathExists=!/etc/ucore-autorebase/signed\nAfter=network-online.target\nWants=network-online.target\n[Service]\nType=oneshot\nStandardOutput=journal+console\nExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-unverified-registry:ghcr.io/ublue-os/ucore:stable\nExecStart=/usr/bin/touch /etc/ucore-autorebase/unverified\nExecStart=/usr/bin/systemctl disable ucore-unsigned-autorebase.service\nExecStart=/usr/bin/systemctl reboot\n[Install]\nWantedBy=multi-user.target\n",
         "enabled": true,
         "name": "ucore-unsigned-autorebase.service"
       },
       {
-        "contents": "[Unit]\nDescription=uCore autorebase to signed OCI and reboot\nConditionPathExists=/etc/ucore-autorebase/unverified\nConditionPathExists=!/etc/ucore-autorebase/verified\nAfter=network-online.target\nWants=network-online.target\n[Service]\nType=oneshot\nStandardOutput=journal+console\nExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/ublue-os/ucore:stable\nExecStart=/usr/bin/touch /etc/ucore-autorebase/signed\nExecStart=/usr/bin/systemctl disable ucore-signed-autorebase.service\nExecStart=/usr/bin/systemctl reboot\n[Install]\nWantedBy=multi-user.target",
+        "contents": "[Unit]\nDescription=uCore autorebase to signed OCI and reboot\nConditionPathExists=/etc/ucore-autorebase/unverified\nConditionPathExists=!/etc/ucore-autorebase/verified\nAfter=network-online.target\nWants=network-online.target\n[Service]\nType=oneshot\nStandardOutput=journal+console\nExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/ublue-os/ucore:stable\nExecStart=/usr/bin/touch /etc/ucore-autorebase/signed\nExecStart=/usr/bin/systemctl disable ucore-signed-autorebase.service\nExecStart=/usr/bin/systemctl reboot\n[Install]\nWantedBy=multi-user.target\n",
         "enabled": true,
         "name": "ucore-signed-autorebase.service"
+      },
+      {
+        "contents": "[Unit]\nDescription=uCore install software to overlay and reboot\nConditionPathExists=/etc/ucore-autorebase/unverified\nConditionPathExists=/etc/ucore-autorebase/signed\nConditionPathExists=!/etc/ucore-autorebase/setup\nAfter=network-online.target\nWants=network-online.target\n[Service]\nType=oneshot\nStandardOutput=journal+console\nExecStart=/usr/bin/chown core:core -R /var/home/core\nExecStart=/usr/bin/rpm-ostree install 1password-cli\nExecStart=/usr/bin/systemctl enable cockpit.service docker.service tailscaled.service\nExecStart=/usr/bin/touch /etc/ucore-autorebase/setup\nExecStart=/usr/bin/systemctl disable post-setup.service\nExecStart=/usr/bin/systemctl reboot\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "post-setup.service"
       }
     ]
   }

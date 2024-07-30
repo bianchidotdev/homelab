@@ -3,7 +3,8 @@ name: Deploy NAS Containers
 on:
   push:
     branches:
-      - main
+      # - main
+      - never
     paths:
       - 'nas/**/*'
       - '.github/workflows/nas.yaml'
@@ -44,15 +45,8 @@ jobs:
         run: |
           echo "NAS_HOST_IP=$(tailscale ip --4 ${{ env.NAS_HOST}})" >> $GITHUB_ENV
 
-      - name: start monitoring stack
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.NAS_HOST_IP }}
-          username: ${{ env.NAS_USER }}
-          key: ${{ env.NAS_SSH_KEY }}
-          script: |
-            cd ~/homelab/
-            git pull
-            cd ~/homelab/nas/${{ matrix.app }}
-            source ~/.bashrc
-            op run --env-file .env -- docker-compose up -d --wait
+      - name: deploy over ssh
+        env: 
+          DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }}
+        run: |
+          op run --env-file .env -- docker-compose up -d --wait

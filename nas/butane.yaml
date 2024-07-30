@@ -15,16 +15,10 @@ storage:
     - path: /etc/hostname
       mode: 0644
       contents:
-        inline: bonkology
+        inline: bonkology-vm
 
 systemd:
   units:
-    - name: docker.service
-      enabled: true
-
-    - name: containerd.service
-      enabled: true
-
     - name: ucore-unsigned-autorebase.service
       enabled: true
       contents: |
@@ -58,6 +52,27 @@ systemd:
         ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/ublue-os/ucore:stable
         ExecStart=/usr/bin/touch /etc/ucore-autorebase/signed
         ExecStart=/usr/bin/systemctl disable ucore-signed-autorebase.service
+        ExecStart=/usr/bin/systemctl reboot
+        [Install]
+        WantedBy=multi-user.target
+    - name: post-setup.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=uCore install software to overlay and reboot
+        ConditionPathExists=/etc/ucore-autorebase/unverified
+        ConditionPathExists=/etc/ucore-autorebase/signed
+        ConditionPathExists=!/etc/ucore-autorebase/setup
+        After=network-online.target
+        Wants=network-online.target
+        [Service]
+        Type=oneshot
+        StandardOutput=journal+console
+        ExecStart=/usr/bin/chown core:core -R /var/home/core
+        ExecStart=/usr/bin/rpm-ostree install 1password-cli
+        ExecStart=/usr/bin/systemctl enable cockpit.service docker.service tailscaled.service
+        ExecStart=/usr/bin/touch /etc/ucore-autorebase/setup
+        ExecStart=/usr/bin/systemctl disable post-setup.service
         ExecStart=/usr/bin/systemctl reboot
         [Install]
         WantedBy=multi-user.target
