@@ -30,7 +30,6 @@ jobs:
           TAILSCALE_OAUTH_SECRET: op://homelab-deploy/tailscale/oauth-client-secret
           NAS_HOST: op://homelab-deploy/nas/host
           NAS_USER: op://homelab-deploy/nas/user
-          NAS_SSH_KEY: op://homelab-deploy/nas/private_key?ssh-format=openssh
 
       - name: Tailscale
         uses: tailscale/github-action@v2
@@ -53,4 +52,7 @@ jobs:
           DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }}
         run: |
           cd nas/${{ matrix.app }}
-          op run --env-file .env -- docker-compose up -d
+          ssh ${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }} '
+            echo $PATH
+          '
+          # op run --env-file .env -- docker-compose up -d
