@@ -12,9 +12,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        app: [monitoring, ddns]
+    # strategy:
+    #   matrix:
+    #     app: [monitoring, ddns]
 
     steps:
       - name: Checkout code
@@ -37,22 +37,16 @@ jobs:
           oauth-client-id: ${{ env.TAILSCALE_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
           tags: tag:ci
-          version: 1.68.2
+          version: 1.70.0
 
-      - name: Get NAS IP
-        run: |
-          echo "NAS_HOST_IP=$(tailscale ip --4 ${{ env.NAS_HOST}})" >> $GITHUB_ENV
-
-      - name: Install 1Password CLI
-        uses: 1password/install-cli-action@v1
+      # - name: Install 1Password CLI
+      #   uses: 1password/install-cli-action@v1
 
       - name: deploy over ssh
-        env: 
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }}
+        # env: 
+          # OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          # DOCKER_HOST: ssh://${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }}
         run: |
-          cd nas/${{ matrix.app }}
-          ssh ${{ env.NAS_USER }}@${{ env.NAS_HOST_IP }} '
-            echo $PATH
-          '
+          # cd nas/${{ matrix.app }}
+          ssh -o "StrictHostKeyChecking no" ${{ env.NAS_USER }}@${{ env.NAS_HOST }} 'echo $PATH'
           # op run --env-file .env -- docker-compose up -d
