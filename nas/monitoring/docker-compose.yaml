@@ -28,7 +28,7 @@ services:
   telegraf:
     image: telegraf:1.31
     # sadly need to hardcode docker group ID for socket permissions
-    user: telegraf:65536
+    user: telegraf:983
     hostname: nas
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -38,8 +38,8 @@ services:
       - /sys:/hostfs/sys:ro
       - /var:/hostfs/var:ro
       - /run:/hostfs/run:ro
-      #- /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      #- /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:Z
+      - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:Z
     environment:
       - INFLUXDB_TOKEN=${INFLUXDB_TELEGRAF_TOKEN}
       - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
