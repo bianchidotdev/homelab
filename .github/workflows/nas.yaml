@@ -50,6 +50,6 @@ jobs:
             # at some point, we ought to git reset --hard ${{ github.sha }}
             git pull
             cd nas/${{ matrix.app }}
-            source ~/.bashrc
+            source ~/.bash_profile
             op run --env-file .env -- docker-compose up -d --wait
           "
