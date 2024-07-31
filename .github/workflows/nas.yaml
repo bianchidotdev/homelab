@@ -39,16 +39,16 @@ jobs:
           tags: tag:ci
           version: 1.70.0
 
-      - name: deploy over ssh
-        env: 
-          HOST: ${{ env.NAS_HOST }}
-          USER: ${{ env.NAS_USER }}
-        run: |
-          ssh -o StrictHostKeyChecking=no $USER@$HOST "
+      - name: start monitoring stack
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.NAS_HOST }}
+          username: ${{ env.NAS_USER }}
+          script: |
             set -e
             cd ~/workspace/homelab/
             # at some point, we ought to git reset --hard ${{ github.sha }}
             git pull
-            cd nas/${{ matrix.app }}
+            cd ~/workspace/homelab/nas/${{ matrix.app }}
             source ~/.bashrc
             op run --env-file .env -- docker-compose up -d --wait
