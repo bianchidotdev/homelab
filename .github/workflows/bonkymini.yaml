@@ -47,8 +47,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no $USER@$HOST "
             set -e
             cd ~/workspace/homelab/
+            # at some point, we ought to git reset --hard ${{ github.sha }}
             git pull
-            cd ~/workspace/homelab/bonkymini/${{ matrix.app }}
-            source ~/.bashrc
+            cd bonkymini/${{ matrix.app }}
+            source ~/.bash_profile
             op run --env-file .env -- docker-compose up -d --wait
           "
