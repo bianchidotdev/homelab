@@ -1,0 +1,123 @@
+---
+variant: flatcar
+version: 1.1.0
+
+systemd:
+  units:
+    - name: obfs4.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=obfs4 bridge
+        [Service]
+        Type=fork
+        EnvironmentFile=/opt/tor-bridge
+        ExecStartPre=-/usr/bin/docker stop tor-bridge
+        ExecStartPre=-/usr/bin/docker rm tor-bridge
+        ExecStartPre=/usr/bin/docker pull thetorproject/obfs4-bridge:latest
+        ExecStart=/usr/bin/docker run \
+          --name tor-bridge \
+          -v "tor-datadir-$${OR_PORT}-$${PT_PORT}:/var/lib/tor" \
+          --env-file /opt/tor-bridge \
+          --publish "$${OR_PORT}:$${OR_PORT}" \
+          --publish "$${PT_PORT}:$${PT_PORT}" \
+          thetorproject/obfs4-bridge:latest
+        [Install]
+        WantedBy=multi-user.target
+    - name: systemd-sysupdate.timer
+      enabled: true
+    - name: systemd-sysupdate.service
+      dropins:
+        - name: tailscale.conf
+          contents: |
+            [Service]
+            ExecStartPre=/usr/lib/systemd/systemd-sysupdate -C tailscale update
+        - name: sysext.conf
+          contents: |
+            [Service]
+            ExecStartPost=systemctl restart systemd-sysext
+
+    - name: tailscaled.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Tailscale node agent
+        Documentation=https://tailscale.com/kb/
+        Wants=network-pre.target
+        After=network-pre.target NetworkManager.service systemd-resolved.service
+
+        [Service]
+        EnvironmentFile=/etc/default/tailscaled
+        ExecStart=/usr/local/sbin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock
+        ExecStopPost=/usr/sbin/tailscaled --cleanup
+
+        Restart=on-failure
+
+        RuntimeDirectory=tailscale
+        RuntimeDirectoryMode=0755
+        StateDirectory=tailscale
+        StateDirectoryMode=0700
+        CacheDirectory=tailscale
+        CacheDirectoryMode=0750
+        Type=notify
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: tailscale.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Tailscale Service
+        After=tailscaled.service
+
+        [Service]
+        ExecStart=/usr/local/bin/tailscale up --auth-key ${tailscale_auth_key}
+        ExecStopPost=/usr/local/bin/tailscale down
+        Restart=on-failure
+
+        [Install]
+        WantedBy=multi-user.target
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOxN58yRjg+8PNAcgCQzM26K9LLf8nH4J1PEqzXLGhQ5
+storage:
+  files:
+    - path: /opt/tor-bridge
+      mode: 0644
+      contents:
+        inline: |
+          OR_PORT=12800
+          PT_PORT=12801
+          EMAIL=${email}
+          NICKNAME=bonkybot
+    - path: /etc/flatcar/update.conf
+      overwrite: true
+      contents:
+        inline: |
+          REBOOT_STRATEGY=reboot
+          LOCKSMITHD_REBOOT_WINDOW_START="Thu 04:00"
+          LOCKSMITHD_REBOOT_WINDOW_LENGTH=1h
+      mode: 0420
+    - path: /opt/extensions/tailscale/tailscale-1.76.6-x86-64.raw
+      contents:
+        source: https://github.com/flatcar/sysext-bakery/releases/download/latest/tailscale-1.76.6-x86-64.raw
+    - path: /etc/sysupdate.d/noop.conf
+      contents:
+        source: https://github.com/flatcar/sysext-bakery/releases/download/latest/noop.conf
+    - path: /etc/sysupdate.tailscale.d/tailscale.conf
+      contents:
+        source: https://github.com/flatcar/sysext-bakery/releases/download/latest/tailscale.conf
+    # to get past the requirement for an EnvironmentFile in the systemd unit
+    - path: /etc/default/tailscaled
+      contents:
+          inline: ""
+  links:
+    - target: /opt/extensions/tailscale/tailscale-1.76.6-x86-64.raw
+      path: /etc/extensions/tailscale.raw
+      hard: false
+    - path: /etc/systemd/system/multi-user.target.wants/tailscaled.service
+      target: /usr/local/lib/systemd/system/tailscaled.service
+      overwrite: true
