@@ -1,24 +1,19 @@
-# variable "flatcar_release_channel" {
-#   type    = string
-#   default = "stable"
-# }
+variable "bridge_count" {
+  type    = number
+  default = 1
+}
 
-# variable "flatcar_architecture" {
-#   type    = string
-#   default = "amd64"
-# }
-
-# variable "flatcar_version" {
-#   type    = string
-#   default = "current"
-# }
+variable "bridge_name_prefix" {
+  sensitive = true
+  type      = string
+}
 
 variable "bridge_email" {
   sensitive = true
-  type    = string
+  type      = string
 }
 
 variable "tailscale_auth_key" {
   sensitive = true
-  type    = string
+  type      = string
 }

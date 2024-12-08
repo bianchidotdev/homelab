@@ -1,3 +1,3 @@
-output "bridge_1_ipv4" {
-  value =  vultr_instance.bridge_1.main_ip
+output "bridges_ipv4" {
+  value = vultr_instance.bridges[*].main_ip
 }
