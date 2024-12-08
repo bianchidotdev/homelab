@@ -52,7 +52,7 @@ systemd:
         After=tailscaled.service
 
         [Service]
-        ExecStart=/usr/local/bin/tailscale up --auth-key ${tailscale_auth_key}
+        ExecStart=/usr/local/bin/tailscale up --auth-key ${tailscale_auth_key} --ssh
         ExecStopPost=/usr/local/bin/tailscale down
         Restart=on-failure
 

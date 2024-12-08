@@ -8,7 +8,7 @@ resource "vultr_instance" "bridges" {
   os_id     = data.vultr_os.flatcar-stable.id
   user_data = data.ct_config.bridges[count.index].rendered
 
-  hostname = "${var.bridge_name_prefix}-${count.index + 1}"
+  hostname = "${var.bridge_name_prefix}${count.index + 1}"
 
   tags = [
     "bridge",
@@ -25,7 +25,7 @@ data "ct_config" "bridges" {
 
   snippets = [
     templatefile("../bridge.yaml.tftpl", {
-      bridge_name = "${var.bridge_name_prefix}-${count.index + 1}"
+      bridge_name = "${var.bridge_name_prefix}${count.index + 1}"
       email       = var.bridge_email
     }),
     templatefile("../tailscale.yaml.tftpl", {
