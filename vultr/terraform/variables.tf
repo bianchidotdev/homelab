@@ -13,6 +13,16 @@ variable "bridge_email" {
   type      = string
 }
 
+variable "bridge_or_port" {
+  type    = number
+  default = 12800
+}
+
+variable "bridge_pt_port" {
+  type    = number
+  default = 12801
+}
+
 variable "tailscale_auth_key" {
   sensitive = true
   type      = string
