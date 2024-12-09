@@ -1,16 +1,16 @@
 resource "vultr_instance" "bridges" {
-  count = var.bridge_count
+  for_each = var.bridges
   # high performance amd 1vcpu 1gb ram
   plan = "vhp-1c-1gb-amd"
   # frankfurt region
-  region   = "fra"
+  region   = each.value.region
   os_id    = data.vultr_os.flatcar-stable.id
-  label    = "bridge-1"
-  hostname = "${var.bridge_name_prefix}${count.index + 1}"
+  label    = each.key
+  hostname = "${var.bridge_name_prefix}${each.key}"
 
   firewall_group_id = vultr_firewall_group.bridges.id
 
-  user_data = data.ct_config.bridges[count.index].rendered
+  user_data = data.ct_config.bridges[each.key].rendered
 
   tags = [
     "bridge",
@@ -42,20 +42,20 @@ resource "vultr_firewall_rule" "allow_pt_port" {
 
 # butane -> ignition resource
 data "ct_config" "bridges" {
-  count        = var.bridge_count
+  for_each     = var.bridges
   content      = file("../system.yaml")
   strict       = true
   pretty_print = false
 
-  snippets = [
+  snippets = flatten([
     templatefile("../bridge.yaml.tftpl", {
-      bridge_name = "${var.bridge_name_prefix}${count.index + 1}"
+      bridge_name = "${var.bridge_name_prefix}${each.key}"
       email       = var.bridge_email
       or_port     = var.bridge_or_port
       pt_port     = var.bridge_pt_port
     }),
-    templatefile("../tailscale.yaml.tftpl", {
+    var.tailscale_auth_key == "" ? [] : [templatefile("../tailscale.yaml.tftpl", {
       tailscale_auth_key = var.tailscale_auth_key
-    }),
-  ]
+    })]
+  ])
 }

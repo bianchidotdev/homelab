@@ -1,3 +1,5 @@
 output "bridges_ipv4" {
-  value = vultr_instance.bridges[*].main_ip
+  value = {
+    for k, v in vultr_instance.bridges : k => v.main_ip
+  }
 }

@@ -1,6 +1,25 @@
-variable "bridge_count" {
-  type    = number
-  default = 1
+variable "bridges" {
+  type = map(object({
+    region = string
+  }))
+
+  default = {
+    bridge1 = {
+      region = "fra" # frankfurt
+    },
+    bridge2 = {
+      region = "waw" # warsaw
+    },
+    bridge3 = {
+      region = "sto" # stockholm
+    },
+    bridge4 = {
+      region = "nrt" # tokyo
+    },
+    bridge5 = {
+      region = "jnb" # johannesburg
+    },
+  }
 }
 
 variable "bridge_name_prefix" {
@@ -24,6 +43,7 @@ variable "bridge_pt_port" {
 }
 
 variable "tailscale_auth_key" {
+  default   = ""
   sensitive = true
   type      = string
 }
