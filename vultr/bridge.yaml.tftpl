@@ -17,10 +17,10 @@ systemd:
         ExecStartPre=/usr/bin/docker pull thetorproject/obfs4-bridge:latest
         ExecStart=/usr/bin/docker run \
           --name tor-bridge \
-          -v "tor-datadir-$${OR_PORT}-$${PT_PORT}:/var/lib/tor" \
+          -v "tor-datadir-${or_port}-${pt_port}:/var/lib/tor" \
           --env-file /opt/tor-bridge \
-          --publish "$${OR_PORT}:$${OR_PORT}" \
-          --publish "$${PT_PORT}:$${PT_PORT}" \
+          --publish "${or_port}:${or_port}" \
+          --publish "${pt_port}:${pt_port}" \
           thetorproject/obfs4-bridge:latest
         [Install]
         WantedBy=multi-user.target
@@ -30,7 +30,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          OR_PORT=${or_port}
+          OR_PORT=${or_port} IPv4Only
           PT_PORT=${pt_port}
           IPv4Only=true
           EMAIL=${email}
