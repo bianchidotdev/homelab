@@ -12,6 +12,12 @@ resource "vultr_instance" "bridges" {
 
   user_data = data.ct_config.bridges[each.key].rendered
 
+  lifecycle {
+    ignore_changes = [
+      user_data,
+    ]
+  }
+
   tags = [
     "bridge",
     "terraform",
