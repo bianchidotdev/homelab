@@ -20,7 +20,7 @@ services:
     environment:
       PORT: 45876
       # Do not remove quotes around the key
-      KEY: 'UPDATE WITH YOUR PUBLIC KEY (copy from "Add system" dialog)'
+      KEY: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBxqhn070un/hjcJUmh4P0ZCLyi4rZAF552FzFn60kP5"
 
 volumes:
   beszel_data:
