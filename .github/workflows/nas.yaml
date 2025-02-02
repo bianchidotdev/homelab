@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'nas/**/*'
-      - '.github/workflows/nas.yaml'
+      - "nas/**/*"
+      - ".github/workflows/nas.yaml"
 
 jobs:
   deploy:
@@ -32,15 +32,15 @@ jobs:
           NAS_USER: op://homelab-deploy/nas/user
 
       - name: Tailscale
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ env.TAILSCALE_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ env.TAILSCALE_OAUTH_SECRET }}
           tags: tag:ci
-          version: 1.70.0
+          version: 1.80.0
 
       - name: deploy over ssh
-        env: 
+        env:
           HOST: ${{ env.NAS_HOST }}
           USER: ${{ env.NAS_USER }}
         run: |
@@ -51,5 +51,6 @@ jobs:
             git pull
             cd nas/${{ matrix.app }}
             source ~/.bash_profile
-            op run --env-file .env -- docker-compose up -d --wait
+            op inject -i .env.tpl -o .env
+            docker-compose up -d --wait
           "

@@ -1,58 +1,23 @@
-version: "3"
-
 services:
-  influxdb:
-    image: influxdb:2
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
-      - DOCKER_INFLUXDB_INIT_RETENTION=90d
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
     ports:
-      - 8086:8086
+      - 8090:8090
     volumes:
-      - influxdb-data:/var/lib/influxdb2
+      - ./beszel_data:/beszel_data
 
-  grafana:
-    image: grafana/grafana:11.1.0
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-    ports:
-      - 3000:3000
-    volumes:
-      - grafana-data:/var/lib/grafana
-  
-  telegraf:
-    image: telegraf:1.31
-    # sadly need to hardcode docker group ID for socket permissions
-    user: telegraf:983
-    hostname: nas
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /:/hostfs:ro
-      - /etc:/hostfs/etc:ro
-      - /proc:/hostfs/proc:ro
-      - /sys:/hostfs/sys:ro
-      - /var:/hostfs/var:ro
-      - /run:/hostfs/run:ro
-      #- /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:Z
-      - ../../common/etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:Z
     environment:
-      - INFLUXDB_TOKEN=${INFLUXDB_TELEGRAF_TOKEN}
-      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
-      - INFLUXDB_ORG=${INFLUXDB_ORG}
-      - HOST_ETC=/hostfs/etc
-      - HOST_PROC=/hostfs/proc
-      - HOST_SYS=/hostfs/sys
-      - HOST_VAR=/hostfs/var
-      - HOST_RUN=/hostfs/run
-      - HOST_MOUNT_PREFIX=/hostfs
-    ports:
-        - 8888:8888
-      
-volumes:
-  grafana-data:
-  influxdb-data:
+      PORT: 45876
+      # Do not remove quotes around the key
+      KEY: 'UPDATE WITH YOUR PUBLIC KEY (copy from "Add system" dialog)'
