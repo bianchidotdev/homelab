@@ -8,7 +8,7 @@ services:
     ports:
       - 8090:8090
     volumes:
-      - ./beszel_data:/beszel_data
+      - beszel_data:/beszel_data
 
   beszel-agent:
     image: henrygd/beszel-agent:latest
@@ -21,3 +21,6 @@ services:
       PORT: 45876
       # Do not remove quotes around the key
       KEY: 'UPDATE WITH YOUR PUBLIC KEY (copy from "Add system" dialog)'
+
+volumes:
+  beszel_data:
