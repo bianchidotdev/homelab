@@ -14,6 +14,8 @@ services:
     image: henrygd/beszel-agent:latest
     container_name: beszel-agent
     restart: unless-stopped
+    security_opt:
+      - label=disable
     network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro,Z
